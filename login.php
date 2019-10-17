@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once("config.php");
 require_once("DBClass.php");
 require_once("UserClass.php");
@@ -13,7 +15,9 @@ if (!$vDataForm) {
 	
 
 	if ($user->auth()) {
-		$vDataForm['OK']="OK";
+		
+		$vDataForm['OK'] = "OK";
+        $_SESSION["id"] = $user->getId();
 	} else {
 		$vDataForm['login'] = "Неправильный логин или пароль";
 	}

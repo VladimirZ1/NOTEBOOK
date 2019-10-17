@@ -39,7 +39,7 @@ class DBClass
         if ($order != null) $sql .= ' ORDER BY '.$order;  
  
         $query = $this->db->query($sql);  
-        if($query) {  
+        if ($query) {  
             $rows = $query->num_rows;  
 
             for($i = 0; $i < $rows; $i++) {  

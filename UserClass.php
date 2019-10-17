@@ -13,30 +13,39 @@ class UserClass {
 	}
 
 	public function iS() {	
-		$login = $this->user->select("login","user","login='".$this->login."'");
+		$userId = $this->user->select("id","user","login='".$this->login."'");
 
-		if ($login) {
+		if ($userId) {
 			return true;
 		}
 		return false;
 	}
 
 	public function auth() {		
-		$user = $this->user->select("login","user","login='".$this->login."' and pass='".$this->pass."'");
+		$userId = $this->user->select("id","user","login='".$this->login."' and pass='".$this->pass."'");
 
-		if ($user) {
-			return true;
+		if ($userId) {
+			return $userId;
 		}
 		return false;
 	}
 
 	public function save() {
 		if (!$this->iS()) {
-			$this->user->insert("user", array($this->login,$this->pass,$this->email));
+			$this->user->insert("user", array($this->login,$this->pass,$this->email),"login,pass,email");
 		}
-
-		
 	}
+
+	public function getId() {	
+		$result = $this->user->select("id","user","login='".$this->login."'");
+		
+		if ($result) {
+
+			return $result[0]['id'];
+		}
+		return false;
+	}
+
 }
 
 ?>

@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once("config.php");
 require_once("DBClass.php");
 require_once("UserClass.php");
@@ -21,6 +23,7 @@ if (!$vDataForm) {
 	} else {
 		$vDataForm['OK'] = "OK";
 		$user->save();
+		$_SESSION["id"] = $user->getId();
 	}
 	
 }
