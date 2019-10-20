@@ -12,15 +12,44 @@ class UserClass {
 
 	}
 
-	public function iS() {	
-		$userId = $this->user->select("id","user","login='".$this->login."'");
+	public static function validateForm($dataForm) {
+		$data = null;
+		$string = "Поле обязательно для ввода";
+	    
 
-		if ($userId) {
-			return true;
-		}
-		return false;
+		if (!$dataForm['login']) 
+			$data['login'] = $string;
+
+		if (isset($dataForm['pass']) && !$dataForm['pass']) 
+			$data['pass'] = $string;
+		
+		if (isset($dataForm['pass1']) && !$dataForm['pass1']) 
+			$data['pass1'] = $string;
+		
+		if (isset($dataForm['pass2']) && !$dataForm['pass2']) {
+			$data['pass2'] = $string;
+		} 
+	    if ($dataForm['pass2'] && $dataForm['pass1']) {
+			if ($dataForm['pass2'] != $dataForm['pass1']) {
+				$data['pass1'] = "Пароли не совпадают";
+			   	$data['pass2'] = "";
+	    	}
+	    }
+
+		if (isset($dataForm['email'])) { 
+			if (!$dataForm['email']) {
+				$data['email'] = $string;
+		    } else if (!filter_var($dataForm['email'], FILTER_VALIDATE_EMAIL)) {
+				$data['email'] = "E-mail адрес указан неверно";
+		    }
+	    }
+		
+		
+
+		return $data;
 	}
 
+	
 	public function auth() {		
 		$userId = $this->user->select("id","user","login='".$this->login."' and pass='".$this->pass."'");
 
@@ -31,7 +60,7 @@ class UserClass {
 	}
 
 	public function save() {
-		if (!$this->iS()) {
+		if (!$this->getId()) {
 			$this->user->insert("user", array($this->login,$this->pass,$this->email),"login,pass,email");
 		}
 	}
