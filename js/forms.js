@@ -2,6 +2,7 @@
 
   let bodyOnLoad = function () {
     document.querySelector('form').addEventListener('input', removeError);
+    
     btnReg.onclick = function (event) {
       onClickBtnReg(event);
     };
@@ -11,7 +12,7 @@
   
   };
 
-	let createElem = function (name,attributes) {
+	let createElem = function (name,attributes,...args) {
 	  let el = document.createElement(name);
 
 		if (typeof attributes === 'object') {
@@ -21,14 +22,12 @@
       }
 
     }
-            
-		for (let i = 2; i < arguments.length; i++) {
-		  let val = arguments[i];
-		      
-		  el.append(val);
-		}
+    
+    for (let arg of args) {
+      el.append(arg);
+    }        
 	  
-	   return el;
+	  return el;
 	};
 
     
@@ -39,7 +38,7 @@
                           createElem("input", {class : "form-control mt-1", id : "pass1", name : "pass1", placeholder : "Пароль", type : "password"}),
                           createElem("input", {class : "form-control mt-1", id : "pass2", name : "pass2", placeholder : "Повтор пароля", type : "password"}),
                           createElem("input", {class : "form-control mt-1", id : "email", name : "email", placeholder : "Email", type : "email"}),
-                          createElem("button", {class : "btn btn-success btn-block mt-2", id : "btnReg2", onclick : "forms.reg(event);",type : "submit"})
+                          createElem("button", {class : "btn btn-success btn-block mt-2", id : "btnReg2", type : "submit"})
                         )
                        );
 
@@ -47,13 +46,18 @@
     document.getElementsByTagName("main")[0].prepend(newRegForm);
     document.getElementById("btnReg2").innerHTML = "ЗАРЕГИСТРИРОВАТЬСЯ";
     document.querySelector('form').addEventListener('input', removeError);
+    btnReg2.onclick = function (event) {
+      reg(event);
+    };
 
   }; 
 
   let removeError = function (event) {
     let idError = event.target.id+"Error";
 
-    event.target.classList.remove("is-invalid");
+    event.target.classList.remove("is-invalid");btnLogin.onclick = function (event) {
+      onClickBtnLogin(event);
+    };
     elem = document.getElementById(idError);
 
     if (elem) {
@@ -95,7 +99,7 @@
   let reg = async  function  (event) {
     event.preventDefault();
     document.querySelectorAll('.invalid-feedback').forEach(function(element){ element.remove(); });
-  
+
     let response = await fetch('registr.php', { 
       method  : 'POST',
       body    : new FormData(regForm)
